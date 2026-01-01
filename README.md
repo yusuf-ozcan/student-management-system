@@ -1,6 +1,6 @@
 # Student Management System 🎓
 
-[![Student Management System Banner](https://img.imagevenue.com/loc362/th_772023050_student_management_system_banner_122_123lo.png)](https://github.com/yusuf-ozcan/student-management-system)
+[![Student Management System Banner](./assets/banner.png)
 
 ## ✨ Overview
 The **Student Management System** is a robust and scalable backend application designed with **Spring Boot 3** to modernize educational administrative tasks. It provides a comprehensive solution for managing student records, course enrollments, grade tracking, and much more, aiming to simplify complex academic workflows.
