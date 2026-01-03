@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.studentmanagement.entity.Student;
 import com.example.studentmanagement.service.StudentService;
+import com.example.studentmanagement.service.DepartmentService;
 
 @Controller
 public class StudentWebController {
@@ -17,19 +18,22 @@ public class StudentWebController {
     @Autowired
     private StudentService studentService;
 
-    // 1. Öğrenci Listesi Sayfası
+    @Autowired
+    private DepartmentService departmentService;
+
+    // 1. Öğrenci Listesi
     @GetMapping("/students")
     public String viewHomePage(Model model) {
         model.addAttribute("students", studentService.getAllStudents());
-        return "students"; 
+        return "students";
     }
 
-    // 2. Yeni Öğrenci Ekleme Formunu Aç
+    // 2. Yeni Öğrenci Ekleme Formu
     @GetMapping("/students/new")
     public String createStudentForm(Model model) {
-        Student student = new Student();
-        model.addAttribute("student", student);
-        return "create_student"; 
+        model.addAttribute("student", new Student());
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        return "create_student";
     }
 
     // 3. Yeni Öğrenci Kaydet
@@ -39,30 +43,31 @@ public class StudentWebController {
         return "redirect:/students";
     }
 
-    // 4. Düzenleme Formunu Aç (Mevcut verileri getirir)
+    // 4. Öğrenci Güncelleme Formu
     @GetMapping("/students/edit/{id}")
     public String editStudentForm(@PathVariable Long id, Model model) {
         model.addAttribute("student", studentService.getStudentById(id));
+        model.addAttribute("departments", departmentService.getAllDepartments());
         return "edit_student";
     }
 
     // 5. Güncellenmiş Bilgileri Kaydet
     @PostMapping("/students/{id}")
-    public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student) {
-        // Veritabanındaki mevcut öğrenciyi bul
+    public String updateStudent(@PathVariable Long id,
+                                @ModelAttribute("student") Student student) {
+
         Student existingStudent = studentService.getStudentById(id);
-        
-        // Formdan gelen güncel bilgilerle mevcut öğrenciyi güncelle
+
         existingStudent.setFirstName(student.getFirstName());
         existingStudent.setLastName(student.getLastName());
         existingStudent.setEmail(student.getEmail());
-        
-        // Değişiklikleri kaydet
+        existingStudent.setDepartment(student.getDepartment()); // 🔥 ÖNEMLİ
+
         studentService.saveStudent(existingStudent);
         return "redirect:/students";
     }
 
-    // 6. Öğrenci Silme
+    // 6. Öğrenci Sil
     @GetMapping("/students/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);

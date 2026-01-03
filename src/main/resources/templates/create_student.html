@@ -8,23 +8,43 @@
 <body class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h2>Yeni Öğrenci Kaydet</h2>
-            <form th:action="@{/students}" th:object="${student}" method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Ad</label>
-                    <input type="text" th:field="*{firstName}" class="form-control" required>
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Yeni Öğrenci Kaydet</h2>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Soyad</label>
-                    <input type="text" th:field="*{lastName}" class="form-control" required>
+                <div class="card-body">
+                    <form th:action="@{/students}" th:object="${student}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Ad</label>
+                            <input type="text" th:field="*{firstName}" class="form-control" placeholder="Ad giriniz" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Soyad</label>
+                            <input type="text" th:field="*{lastName}" class="form-control" placeholder="Soyad giriniz" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">E-posta</label>
+                            <input type="email" th:field="*{email}" class="form-control" placeholder="ornek@mail.com" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label font-weight-bold">Bölüm</label>
+                            <select th:field="*{department}" class="form-select" required>
+                                <option value="" disabled selected>Bir bölüm seçiniz...</option>
+                                <option th:each="dept : ${departments}" 
+                                        th:value="${dept.id}" 
+                                        th:text="${dept.name}">
+                                </option>
+                            </select>
+                            <div class="form-text">Öğrencinin bağlı olduğu fakülte/bölümü seçin.</div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-block text-end">
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                            <a th:href="@{/students}" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">E-posta</label>
-                    <input type="email" th:field="*{email}" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Kaydet</button>
-                <a th:href="@{/students}" class="btn btn-secondary">İptal</a>
-            </form>
+            </div>
         </div>
     </div>
 </body>
