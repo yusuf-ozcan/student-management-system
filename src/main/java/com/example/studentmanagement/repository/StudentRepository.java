@@ -10,7 +10,6 @@ import com.example.studentmanagement.entity.Student;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    // Ad, soyad veya e-posta içerisinde anahtar kelimeyi (ignore case eklemeden) arar
     List<Student> findByFirstNameContainingOrLastNameContainingOrEmailContaining(
         String firstName, String lastName, String email);
     

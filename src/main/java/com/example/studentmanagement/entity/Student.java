@@ -34,7 +34,7 @@ public class Student {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    // --- GETTER VE SETTER ---
+    // --- GETTER AND SETTER ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

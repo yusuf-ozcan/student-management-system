@@ -21,16 +21,13 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private List<Student> students;
 
-    // 1. BOŞ CONSTRUCTOR (JPA için zorunludur)
     public Department() {
     }
 
-    // 2. İSİM ALAN CONSTRUCTOR (Main sınıfındaki hatayı bu çözer)
     public Department(String name) {
         this.name = name;
     }
 
-    // 3. GETTER VE SETTER METOTLARI
     public Long getId() {
         return id;
     }

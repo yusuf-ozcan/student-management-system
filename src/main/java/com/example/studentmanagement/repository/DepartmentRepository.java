@@ -7,5 +7,4 @@ import com.example.studentmanagement.entity.Department;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
-    // JpaRepository sayesinde temel CRUD işlemleri (save, findAll, delete vb.) otomatik hazır gelir.
 }

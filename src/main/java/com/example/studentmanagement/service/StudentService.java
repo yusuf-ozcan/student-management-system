@@ -19,9 +19,7 @@ public class StudentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    // --- ÖĞRENCİ İŞLEMLERİ ---
     
-    // Kullanıcının girdiği tek bir kelimeyi 3 farklı alanda aratır
     public List<Student> searchStudents(String keyword) {
         if (keyword != null && !keyword.isEmpty()) {
             return studentRepository.findByFirstNameContainingOrLastNameContainingOrEmailContaining(keyword, keyword, keyword);
@@ -45,7 +43,6 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    // --- DEPARTMAN İŞLEMLERİ ---
     
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();

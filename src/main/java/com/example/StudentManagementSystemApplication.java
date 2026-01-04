@@ -18,7 +18,7 @@ public class StudentManagementSystemApplication {
     @Bean
     CommandLineRunner run(DepartmentRepository departmentRepository) {
         return args -> {
-            // Eğer veritabanında hiç bölüm yoksa ekle
+            
             if (departmentRepository.count() == 0) {
                 departmentRepository.save(new Department("Bilgisayar Mühendisliği"));
                 departmentRepository.save(new Department("Yazılım Mühendisliği"));
