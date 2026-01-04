@@ -3,14 +3,14 @@ package com.example.studentmanagement.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.studentmanagement.entity.Student;
 import com.example.studentmanagement.service.StudentService;
 import com.example.studentmanagement.service.DepartmentService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class StudentWebController {
@@ -21,10 +21,16 @@ public class StudentWebController {
     @Autowired
     private DepartmentService departmentService;
 
-    // 1. Öğrenci Listesi
+    // 1. Öğrenci Listesi + ARAMA ÖZELLİĞİ
     @GetMapping("/students")
-    public String viewHomePage(Model model) {
-        model.addAttribute("students", studentService.getAllStudents());
+    public String viewHomePage(Model model, @RequestParam(value = "keyword", required = false) String keyword) {
+        if (keyword != null) {
+            // StudentService içinde searchStudents metodu olduğunu varsayıyoruz
+            model.addAttribute("students", studentService.searchStudents(keyword));
+            model.addAttribute("keyword", keyword);
+        } else {
+            model.addAttribute("students", studentService.getAllStudents());
+        }
         return "students";
     }
 
@@ -36,9 +42,13 @@ public class StudentWebController {
         return "create_student";
     }
 
-    // 3. Yeni Öğrenci Kaydet
+    // 3. Yeni Öğrenci Kaydet + DOĞRULAMA (Validation)
     @PostMapping("/students")
-    public String saveStudent(@ModelAttribute("student") Student student) {
+    public String saveStudent(@Valid @ModelAttribute("student") Student student, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            return "create_student"; // Hata varsa forma geri dön
+        }
         studentService.saveStudent(student);
         return "redirect:/students";
     }
@@ -51,17 +61,22 @@ public class StudentWebController {
         return "edit_student";
     }
 
-    // 5. Güncellenmiş Bilgileri Kaydet
+    // 5. Güncellenmiş Bilgileri Kaydet + DOĞRULAMA (Validation)
     @PostMapping("/students/{id}")
     public String updateStudent(@PathVariable Long id,
-                                @ModelAttribute("student") Student student) {
+                                @Valid @ModelAttribute("student") Student student,
+                                BindingResult result,
+                                Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            return "edit_student";
+        }
 
         Student existingStudent = studentService.getStudentById(id);
-
         existingStudent.setFirstName(student.getFirstName());
         existingStudent.setLastName(student.getLastName());
         existingStudent.setEmail(student.getEmail());
-        existingStudent.setDepartment(student.getDepartment()); // 🔥 ÖNEMLİ
+        existingStudent.setDepartment(student.getDepartment());
 
         studentService.saveStudent(existingStudent);
         return "redirect:/students";

@@ -7,6 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "students")
@@ -16,16 +19,22 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "İsim boş bırakılamaz")
+    @Size(min = 2, message = "İsim en az 2 karakter olmalıdır")
     private String firstName;
+
+    @NotBlank(message = "Soyisim boş bırakılamaz")
     private String lastName;
+
+    @NotBlank(message = "E-posta boş bırakılamaz")
+    @Email(message = "Lütfen geçerli bir e-posta adresi giriniz")
     private String email;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
-    // --- MANUEL GETTER VE SETTER (Lombok yerine bunları kullan) ---
-
+    // --- GETTER VE SETTER ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
